@@ -4,22 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="38f2ba7a-257f-43c4-b0bb-05fe2289b802" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fit/iuh/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fit/iuh/models/Category.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fit/iuh/models/Question.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fit/iuh/models/Quiz.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fit/iuh/utils/JsonUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/json/quizzes2.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/iuh/fit/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/iuh/fit/models/Category.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/iuh/fit/models/Question.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/iuh/fit/models/Quiz.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/iuh/fit/utils/JsonUtils.java" beforeDir="false" />
-    </list>
+    <list default="true" id="38f2ba7a-257f-43c4-b0bb-05fe2289b802" name="Changes" comment="Ex9\ ObjectModelAPI quiz" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -103,11 +88,24 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1774613109455</updated>
-      <workItem from="1774613110450" duration="3791000" />
+      <workItem from="1774613110450" duration="4483000" />
     </task>
+    <task id="LOCAL-00001" summary="Ex9\ ObjectModelAPI quiz">
+      <option name="closed" value="true" />
+      <created>1774617620264</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1774617620264</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Ex9\ ObjectModelAPI quiz" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ex9\ ObjectModelAPI quiz" />
   </component>
 </project>
