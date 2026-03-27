@@ -14,6 +14,6 @@ public class Main {
     public static void main(String[] args) {
         List<Student> res = JsonUtils.listStudentsByClassName("Math","json/classes.json");
         res.forEach(System.out::println);
-//        JsonUtils.writeStudentsToJson(res, "json/students.json");
+        JsonUtils.writeStudentsToJson(res, "json/students.json");
     }
 }

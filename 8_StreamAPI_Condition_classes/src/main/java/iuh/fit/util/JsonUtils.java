@@ -4,6 +4,7 @@ import iuh.fit.model.Address;
 import iuh.fit.model.ClassInfo;
 import iuh.fit.model.Student;
 import jakarta.json.Json;
+import jakarta.json.JsonArray;
 import jakarta.json.stream.JsonGenerator;
 import jakarta.json.stream.JsonGeneratorFactory;
 import jakarta.json.stream.JsonParser;
@@ -24,52 +25,48 @@ public class JsonUtils {
     public static List<Student> listStudentsByClassName(String className, String fileName) {
         List<Student> res = new ArrayList<>();
 
-        try(JsonParser parser = Json.createParser(new FileReader(fileName))) {
-
+        try (JsonParser parser = Json.createParser(new FileReader(fileName))) {
             Student student = null;
             Address address = null;
 
-            boolean isMatch = false;
-            boolean isStudentArray = false;
             String key = "";
-
+            boolean isMatch = false;
+            boolean isInStudentArray = false;
             while(parser.hasNext()) {
                 JsonParser.Event event = parser.next();
-
                 switch (event) {
                     case START_ARRAY -> {
-                        if (key.equalsIgnoreCase("students")&& isMatch)
-                            isStudentArray = true;
+                        if (key.equalsIgnoreCase("students") && isMatch) isInStudentArray = true;
                     }
                     case END_ARRAY -> {
-                        if (isStudentArray) isStudentArray = false;
+                        if (isInStudentArray) isInStudentArray = false;
                     }
                     case START_OBJECT -> {
-                        if (student == null && isStudentArray) {
-                            student = new Student();
-                        }else if (address == null && isStudentArray) {
+                        if (key.equalsIgnoreCase("address")&&isInStudentArray) {
                             address = new Address();
+                        }else if (student == null && isInStudentArray ) {
+                            student = new Student();
                         }
                     }
                     case END_OBJECT -> {
-                        if (isStudentArray && address!= null) {
+                        if (address!=null && isInStudentArray) {
                             student.setAddress(address);
                             address = null;
-                        }else if (isStudentArray && student!= null) {
+                        }else if (student != null && isInStudentArray) {
                             res.add(student);
                             student = null;
-                        }else if (!isStudentArray) isMatch = false;
-
+                        }else if (!isInStudentArray) {
+                            isMatch = false;
+                        }
                     }
                     case KEY_NAME -> key = parser.getString();
                     case VALUE_STRING -> {
                         String value = parser.getString();
-                        if (
-                                value.equalsIgnoreCase(className)
-                                && key.equalsIgnoreCase("name")
-                                && !isStudentArray
+                        if (key.equalsIgnoreCase("name")
+                                && !isInStudentArray
+                                && value.equalsIgnoreCase(className)
                         ) isMatch = true;
-                        if (isStudentArray) {
+                        else if (isInStudentArray) {
                             switch (key) {
                                 case "name" -> student.setName(value);
                                 case "street" -> address.setStreet(value);
@@ -78,19 +75,16 @@ public class JsonUtils {
                                 case "zip" -> address.setZip(value);
                             }
                         }
-
                     }
                     case VALUE_NUMBER -> {
-                        if (isStudentArray) {
+                        if (isInStudentArray) {
                             switch (key) {
                                 case "age" -> student.setAge(parser.getInt());
                                 case "gpa" -> student.setGpa(parser.getBigDecimal().doubleValue());
                             }
                         }
-
                     }
                 }
-
             }
 
         } catch (Exception e) {
@@ -98,5 +92,34 @@ public class JsonUtils {
         }
 
         return res;
+    }
+    public static void writeStudentsToJson(List<Student> students, String fileName) {
+        Map<String,Object> config = Map.of(JsonGenerator.PRETTY_PRINTING,true);
+        JsonGeneratorFactory jsonGeneratorFactory = Json.createGeneratorFactory(config);
+
+        try(JsonGenerator jsonGenerator= jsonGeneratorFactory.createGenerator(new FileWriter(fileName)) ) {
+
+            jsonGenerator.writeStartArray();
+            students.forEach(student -> {
+                jsonGenerator.writeStartObject();
+                jsonGenerator.write("name",student.getName());
+                jsonGenerator.write("age",student.getAge());
+                jsonGenerator.write("gpa",student.getGpa());
+                Address address = student.getAddress();
+                jsonGenerator.writeStartObject("address");
+                jsonGenerator.write("street",address.getStreet());
+                jsonGenerator.write("city",address.getCity());
+                jsonGenerator.write("state",address.getState());
+                jsonGenerator.write("zip",address.getZip());
+                jsonGenerator.writeEnd();
+                jsonGenerator.writeEnd();
+            });
+            jsonGenerator.writeEnd();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 }
