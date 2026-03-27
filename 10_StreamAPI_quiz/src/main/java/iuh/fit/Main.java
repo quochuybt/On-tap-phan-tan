@@ -7,8 +7,8 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        List<Quiz> quizzes = JsonUtils.listQuizzes("C001","json/quizzes.json");
-        quizzes.forEach(System.out::println);
-        JsonUtils.writeQuizToJson(quizzes,"json/quizzes2.json");
+        List<Quiz> res = JsonUtils.listQuizzes("C001","json/quizzes.json");
+        res.forEach(System.out::println);
+        JsonUtils.writeQuizzesToFile(res,"json/quizzes2.json");
     }
 }

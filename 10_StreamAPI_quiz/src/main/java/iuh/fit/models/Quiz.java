@@ -13,6 +13,7 @@ public class Quiz {
     private String quiz_id;
     private String name;
     private int score;
+
     private List<Question> questions;
     private Category category;
 }

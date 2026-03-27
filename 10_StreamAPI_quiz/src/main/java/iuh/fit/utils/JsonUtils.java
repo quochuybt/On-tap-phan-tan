@@ -15,64 +15,64 @@ import java.util.List;
 import java.util.Map;
 
 public class JsonUtils {
-    public static List<Quiz> listQuizzes(String categoryId,String fileName) {
+    public static List<Quiz> listQuizzes(String categoryId, String fileName) {
         List<Quiz> res = new ArrayList<>();
 
-        try(JsonParser parser = Json.createParser(new FileReader(fileName))) {
-
-            Quiz quiz = null;
-            List<Question> questions = null;
-            Question question= null;
-            List<String> options = null;
+        try (JsonParser parser = Json.createParser(new FileReader(fileName))) {
+           Quiz quiz = null;
+           List<Question> questions = null;
+           Question question = null;
+           List<String> options = null;
             Category category = null;
 
             String key = "";
-            String currentObject ="";
+            String currentObject = "";
             boolean isMatch = false;
 
             while (parser.hasNext()) {
                 JsonParser.Event event = parser.next();
+
                 switch (event) {
                     case START_ARRAY -> {
                         if (key.equalsIgnoreCase("questions")) {
                             questions = new ArrayList<>();
-                            currentObject = "questions";
                         }else if (key.equalsIgnoreCase("options")) {
                             options = new ArrayList<>();
-                            currentObject = "options";
                         }
                     }
                     case START_OBJECT -> {
-//
-                        if ("category".equalsIgnoreCase(key)) {
+                        if (category==null && key.equalsIgnoreCase("category")) {
                             category = new Category();
                             currentObject = "category";
-                        }
-                        else if (questions!=null && question ==null) {
+                        }else if (questions!= null && question == null) {
                             question = new Question();
                             currentObject = "question";
-                        }
-                        else if(quiz==null){
+                        }else if (quiz == null) {
                             quiz = new Quiz();
                             currentObject = "quiz";
+
+                        }
+                    }
+                    case END_ARRAY -> {
+                        if (key.equalsIgnoreCase("options")&& options!= null) {
+                            question.setOptions(options);
+                            options = null;
                         }
                     }
                     case END_OBJECT -> {
-                        if (question != null) {
-                            question.setOptions(options);
-                            questions.add(question);
-                            options = null;
-                            question = null;
-                            currentObject = "questions";
-                        }else if (category != null) {
+                        if (category!=null) {
                             quiz.setCategory(category);
                             category = null;
                             currentObject = "quiz";
+                        }else if (question != null) {
+                            questions.add(question);
+                            question = null;
+                            currentObject = "questions";
                         }else if (quiz != null) {
                             quiz.setQuestions(questions);
                             if (isMatch) res.add(quiz);
-                            quiz = null;
                             questions = null;
+                            quiz = null;
                             currentObject = "";
                             isMatch = false;
                         }
@@ -83,24 +83,23 @@ public class JsonUtils {
                         switch (key) {
                             case "quiz_id" -> quiz.setQuiz_id(value);
                             case "name" -> {
-                                if (currentObject.equalsIgnoreCase("quiz")) {
+                                if (currentObject.equalsIgnoreCase("category")) {
+                                    category.setName(value);
+                                }else if (currentObject.equalsIgnoreCase("quiz")) {
                                     quiz.setName(value);
-                                }else if (currentObject.equalsIgnoreCase("category")) category.setName(value);
+                                }
                             }
                             case "question_id" -> question.setQuestion_id(value);
                             case "text" -> question.setText(value);
                             case "correct_answer" -> question.setCorrect_answer(value);
                             case "category_id" -> {
-                                if (category != null) {
-                                    if (categoryId.equalsIgnoreCase(value)) isMatch = true;
-                                    category.setCategory_id(value);
-                                }
+                                if (categoryId.equalsIgnoreCase(value)) isMatch = true;
+                                category.setCategory_id(value);
                             }
                             default -> {
-                                if (currentObject.equalsIgnoreCase("options")) options.add(value);
+                                options.add(value);
                             }
                         }
-
                     }
                     case VALUE_NUMBER -> {
                         quiz.setScore(parser.getInt());
@@ -111,27 +110,22 @@ public class JsonUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return res;
     }
-    public static void writeQuizToJson (List<Quiz> quizzes,String fileName) {
+    public static void writeQuizzesToFile(List<Quiz> quizzes, String fileName) {
         Map<String,Object> config = Map.of(JsonGenerator.PRETTY_PRINTING,true);
         JsonGeneratorFactory jsonGeneratorFactory = Json.createGeneratorFactory(config);
 
-        try (JsonGenerator jsonGenerator = jsonGeneratorFactory.createGenerator(new FileWriter(fileName))) {
+        try(JsonGenerator jsonGenerator = jsonGeneratorFactory.createGenerator(new FileWriter(fileName))) {
 
             jsonGenerator.writeStartArray();
             quizzes.forEach(quiz -> {
-
                 jsonGenerator.writeStartObject();
-
                 jsonGenerator.write("quiz_id",quiz.getQuiz_id());
                 jsonGenerator.write("name",quiz.getName());
                 jsonGenerator.write("score",quiz.getScore());
-
                 List<Question> questions = quiz.getQuestions();
                 jsonGenerator.writeStartArray("questions");
-
                 questions.forEach(question -> {
                     jsonGenerator.writeStartObject();
                     jsonGenerator.write("question_id",question.getQuestion_id());
@@ -146,23 +140,17 @@ public class JsonUtils {
                     jsonGenerator.writeEnd();
                 });
                 jsonGenerator.writeEnd();
-                Category category = quiz.getCategory();
                 jsonGenerator.writeStartObject("category");
-
+                Category category = quiz.getCategory();
                 jsonGenerator.write("category_id",category.getCategory_id());
                 jsonGenerator.write("name",category.getName());
-
                 jsonGenerator.writeEnd();
-
                 jsonGenerator.writeEnd();
-
             });
-
             jsonGenerator.writeEnd();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
