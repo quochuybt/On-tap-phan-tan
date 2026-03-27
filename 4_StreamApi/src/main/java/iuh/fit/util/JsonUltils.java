@@ -37,13 +37,20 @@ public class JsonUltils {
                         }
                     }
                     case START_OBJECT -> {
-                        if (person == null) {
-                            person = new Person();
-                        }else if (address == null && key.equalsIgnoreCase("address")) {
+                        if (key.equalsIgnoreCase("address")) {
                             address = new Address();
-                        }else if (phoneNumber == null) {
+                        }else if (phoneNumbers!= null && phoneNumber==null) {
                             phoneNumber = new PhoneNumber();
+                        }else if (person==null) {
+                            person = new Person();
                         }
+//                        if (person == null) {
+//                            person = new Person();
+//                        }else if (address == null && key.equalsIgnoreCase("address")) {
+//                            address = new Address();
+//                        }else if (phoneNumber == null) {
+//                            phoneNumber = new PhoneNumber();
+//                        }
                     }
                     case END_OBJECT -> {
                         if (address != null) {
