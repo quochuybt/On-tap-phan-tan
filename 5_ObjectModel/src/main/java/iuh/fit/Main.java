@@ -1,0 +1,14 @@
+package iuh.fit;
+
+import iuh.fit.model.Person;
+import iuh.fit.util.JsonUtils;
+
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+        List<Person>  people = JsonUtils.fromJson("json/People.json");
+        people.forEach(System.out::println);
+        JsonUtils.writeToFile(people,"json/People2.json");
+    }
+}
