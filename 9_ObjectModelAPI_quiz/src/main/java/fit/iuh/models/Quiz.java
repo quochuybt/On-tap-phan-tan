@@ -1,4 +1,5 @@
-package iuh.fit.models;
+package fit.iuh.models;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,17 +1,16 @@
-package iuh.fit.models;
+package fit.iuh.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Question {
     private String question_id;
     private String text;
-    private List<String> option;
+    private List<String> options;
     private String correct_answer;
 }
