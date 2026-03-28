@@ -11,6 +11,6 @@ public class Main {
         Map<String,Object> map = JsonUltils.getStudentCourseData("json/classInfo.json");
         List<Course> courses = (List<Course>) map.get("courses");
         courses.forEach(System.out::println);
-        JsonUltils.writeToFile(map,"json/classInfo2.json");
+        JsonUltils.writeToFile(map,"courses","json/classInfo2.json");
     }
 }

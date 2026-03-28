@@ -57,43 +57,46 @@ public class JsonUltils {
         }
         return res;
     }
-    public static void writeToFile(Map<String,Object> data,String fileName) {
+    public static void writeToFile(Map<String,Object> data,String key,String fileName) {
         Map<String,Object> config = Map.of(JsonGenerator.PRETTY_PRINTING,true);
         JsonWriterFactory jsonWriterFactory = Json.createWriterFactory(config);
 
         try(JsonWriter jsonWriter = jsonWriterFactory.createWriter(new FileWriter(fileName))) {
-
             JsonObjectBuilder elementJsonObject = Json.createObjectBuilder();
-
-            List<Student> students = (List<Student>) data.get("students");
-            JsonArrayBuilder studentJsonArray = Json.createArrayBuilder();
-            students.forEach(student -> {
-                studentJsonArray.add(Json.createObjectBuilder()
-                        .add("studentId",student.getStudentId())
-                        .add("name",student.getName()));
-            });
-            elementJsonObject.add("students",studentJsonArray);
-
-            List<Course> courses = (List<Course>) data.get("courses");
-            JsonArrayBuilder coursesJsonArray = Json.createArrayBuilder();
-            courses.forEach(course -> {
-                coursesJsonArray.add(Json.createObjectBuilder()
-                        .add("courseId",course.getCourseId())
-                        .add("courseName",course.getCourseName()));
-            });
-            elementJsonObject.add("courses",coursesJsonArray);
-
-            List<Enrollment> enrollments = (List<Enrollment>) data.get("enrollments");
-            JsonArrayBuilder enrollmentJsonArray = Json.createArrayBuilder();
-            enrollments.forEach(enrollment -> {
-                enrollmentJsonArray.add(Json.createObjectBuilder()
-                        .add("studentId",enrollment.getStudentId())
-                        .add("courseId",enrollment.getCourseId())
-                        .add("semester",enrollment.getSemester())
-                        .add("grade",enrollment.getGrade()));
-            });
-            elementJsonObject.add("enrollments",enrollmentJsonArray);
-
+            switch (key) {
+                case "students" -> {
+                    List<Student> students = (List<Student>) data.get("students");
+                    JsonArrayBuilder studentJsonArray = Json.createArrayBuilder();
+                    students.forEach(student -> {
+                        studentJsonArray.add(Json.createObjectBuilder()
+                                .add("studentId",student.getStudentId())
+                                .add("name",student.getName()));
+                    });
+                    elementJsonObject.add("students",studentJsonArray);
+                }
+                case "courses" -> {
+                    List<Course> courses = (List<Course>) data.get("courses");
+                    JsonArrayBuilder coursesJsonArray = Json.createArrayBuilder();
+                    courses.forEach(course -> {
+                        coursesJsonArray.add(Json.createObjectBuilder()
+                                .add("courseId",course.getCourseId())
+                                .add("courseName",course.getCourseName()));
+                    });
+                    elementJsonObject.add("courses",coursesJsonArray);
+                }
+                case "enrollments" -> {
+                    List<Enrollment> enrollments = (List<Enrollment>) data.get("enrollments");
+                    JsonArrayBuilder enrollmentJsonArray = Json.createArrayBuilder();
+                    enrollments.forEach(enrollment -> {
+                        enrollmentJsonArray.add(Json.createObjectBuilder()
+                                .add("studentId",enrollment.getStudentId())
+                                .add("courseId",enrollment.getCourseId())
+                                .add("semester",enrollment.getSemester())
+                                .add("grade",enrollment.getGrade()));
+                    });
+                    elementJsonObject.add("enrollments",enrollmentJsonArray);
+                }
+            }
             jsonWriter.write(elementJsonObject.build());
         } catch (Exception e) {
             e.printStackTrace();
