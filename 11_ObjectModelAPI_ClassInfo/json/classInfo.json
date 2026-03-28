@@ -1,0 +1,32 @@
+{
+  "students": [
+    {
+      "studentId": "S001",
+      "name": "Nguyen Van A"
+    }
+  ],
+  "courses": [
+    {
+      "courseId": "C001",
+      "courseName": "Java Programming"
+    },
+    {
+      "courseId": "C002",
+      "courseName": "Database Systems"
+    }
+  ],
+  "enrollments": [
+    {
+      "studentId": "S001",
+      "courseId": "C001",
+      "semester": "2025A",
+      "grade": 8.5
+    },
+    {
+      "studentId": "S001",
+      "courseId": "C002",
+      "semester": "2025B",
+      "grade": 7.8
+    }
+  ]
+}
