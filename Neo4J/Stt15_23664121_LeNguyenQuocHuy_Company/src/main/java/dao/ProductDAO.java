@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 public class ProductDAO {
+
+//    CREATE INDEX companyNameIdex FOR (s:Supplier) ON (s.company_name)
+
     public static List<Product> listProductsBySupplier(String companyName, int page, int size) {
         if (companyName.trim() == "" || companyName ==null) {
             System.out.println("companyName: Không được null hoặc rỗng");
