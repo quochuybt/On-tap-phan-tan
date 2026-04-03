@@ -170,20 +170,37 @@ public class ProductDAO {
             });
         }
     }
+    // Thêm sản phẩm vào đơn hàng
+    public static boolean addOrderDetail(String orderID, String productID, int quantity, double price, double discount) {
+        String query = """
+                MATCH (p:Product {product_id:$productID})
+                MATCH (o:Order {order_id:$orderID})\s
+                WITH p,o
+                MERGE (o)-[:ORDERS {discount:$discount,quantity:$quantity,unit_price:$price}]->(p)
+                """;
+        Map<String, Object> params = Map.of("orderID",orderID,"productID",productID,"discount",discount,"quantity",quantity,"price",price);
+        try (Session session= AppUtils.getSession()) {
+            return session.executeWrite(tx->{
+                ResultSummary resultSummary = tx.run(query,params).consume();
+                return resultSummary.counters().relationshipsCreated()>0;
+            });
+        }
+    }
 
     public static void main(String[] args) {
-//        listProductsByName("Chai",1,3).forEach(System.out::println);
+//        listProductsByName("Cansa",2,2).forEach(System.out::println);
 //        listOrdersByStatus("COMPLETED").forEach(System.out::println);
 //        listSuppliersByCountry("Japan").forEach(System.out::println);
-//        Product product = new Product("P050","Shiba","100kg",100.8,100);
+//        Product product = new Product("P090","Cansa","100kg",100.8,100);
 //        System.out.println(addProduct(product,"S005"));
 //        System.out.println(updateProductPrice("P014",1000));
 //        System.out.println(deleteSupplier("S002"));
 //        countProductsBySupplier().forEach(
 //                (k,v)-> System.out.println(k+" "+v)
 //        );
-        revenueByMonth(2024).forEach(
-                (k,v) -> System.out.println(k+" "+v)
-        );
+//        revenueByMonth(2024).forEach(
+//                (k,v) -> System.out.println(k+" "+v)0000
+//        );
+        System.out.println(addOrderDetail("O001","P015",10,10.0,0.4));
     }
 }
