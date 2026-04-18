@@ -3,13 +3,15 @@ package model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "profiles")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Profile {
+public class Profile implements Serializable {
 
     @Id
     @EqualsAndHashCode.Include
