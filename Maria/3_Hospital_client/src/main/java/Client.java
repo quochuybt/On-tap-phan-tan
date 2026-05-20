@@ -1,7 +1,8 @@
-package network;
-
 import dto.AppointmentDTO;
 import entity.Status;
+import network.CommandType;
+import network.Request;
+import network.Response;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

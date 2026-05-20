@@ -1,6 +1,6 @@
 package network;
 
-import dto.AppointmentDto;
+import dto.AppointmentDTO;
 import dto.DoctorWorkloadDTO;
 import service.AppointmentService;
 import service.DoctorService;
@@ -11,11 +11,9 @@ import java.net.Socket;
 import java.util.List;
 
 public class ClientHandler implements Runnable{
-
     private Socket socket;
     private AppointmentService appointmentService;
     private DoctorService doctorService;
-
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
@@ -25,49 +23,41 @@ public class ClientHandler implements Runnable{
 
     @Override
     public void run() {
-        try(
+        try (
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-                ){
-            while(true) {
+                ) {
+            while (true) {
                 Request request = (Request) in.readObject();
-                CommandType type = request.getCommandType();
+                CommandType commandType = request.getCommandType();
                 Response response = new Response();
-                switch (type) {
+
+                switch (commandType) {
                     case ADD_APPOINTMENT -> {
-                        try {
-                            AppointmentDto appointmentDto = (AppointmentDto) request.getObject();
-                            System.out.println(appointmentDto);
-                            boolean result = appointmentService.addAppointment(appointmentDto);
-                            response.setSuccess(true);
-                            response.setData(appointmentDto);
-                            response.setMessage(result?"add success":"add error");
-                        }catch (Throwable e) {
-                            response.setSuccess(false);
-                            response.setMessage(e.getMessage());
-                            e.printStackTrace();
-                        }
+                        AppointmentDTO appointmentDTO = (AppointmentDTO) request.getObject();
+                        boolean res = appointmentService.addAppointment(appointmentDTO);
+                        response.setSuccess(res);
+                        response.setData(appointmentDTO);
+                        response.setMessage(res?"add success":"add error");
                     }
                     case GET_APPOINTMENT_DETAILS -> {
-                        List<AppointmentDto> list = appointmentService.getAppointmentDetails();
+                        List<AppointmentDTO> list = appointmentService.getAppointmentDetails();
                         response.setSuccess(true);
                         response.setData(list);
-                        response.setMessage("Get: "+ list.size() + " of appointment");
+                        response.setMessage("get success");
                     }
-                    case GET_DOCTOR_WORKLOADS ->  {
+                    case GET_DOCTOR_WORKLOAD -> {
                         List<DoctorWorkloadDTO> list = doctorService.getDoctorWorkload();
                         response.setSuccess(true);
                         response.setData(list);
-                        response.setMessage("Get: "+ list.size() + " of doctor workload");
+                        response.setMessage("get success");
                     }
                 }
                 out.writeObject(response);
                 out.flush();
             }
-
-        }catch (Throwable e) {
-            System.out.println("Server error");
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -1,20 +1,23 @@
-package entity;
+package dto;
 
-import jakarta.persistence.Embeddable;
+import entity.Status;
 import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-@Embeddable
+@Getter
+@Setter
 @Builder
-public class AppointmentId implements Serializable {
+@ToString
+public class AppointmentDTO implements Serializable {
     private String doctorId;
+    private String doctorName;
     private String patientId;
+    private String patientName;
     private LocalDateTime appointmentTime;
+    private Status status;
 }

@@ -3,35 +3,50 @@ package entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.io.Serializable;
+import javax.swing.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "Appointments")
+@AllArgsConstructor
 @Getter
 @Setter
-@ToString(exclude = {"doctor", "patient"})
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
+@ToString
+@Table(name = "Appointments")
+@Entity
 public class Appointment {
 
     @EmbeddedId
     private AppointmentId id;
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+
     @ManyToOne
-    @JoinColumn(name = "doctorId")
-    @EqualsAndHashCode.Include
     @MapsId("doctorId")
+    @JoinColumn(name = "doctorId")
     private Doctor doctor;
 
     @ManyToOne
-    @JoinColumn(name = "patientId")
-    @EqualsAndHashCode.Include
     @MapsId("patientId")
+    @JoinColumn(name = "patientId")
     private Patient patient;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    @Builder
+    @ToString
+    @Embeddable
+    public static class AppointmentId {
+        private String doctorId;
+        private String patientId;
+
+        @Column(columnDefinition = "DATETIME")
+        private LocalDateTime appointmentTime;
+    }
 }

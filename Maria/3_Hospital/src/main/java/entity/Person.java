@@ -2,20 +2,21 @@ package entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "People")
+@AllArgsConstructor
 @Getter
 @Setter
+@SuperBuilder
+@ToString
+@Table(name = "People")
+@Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public abstract class Person {
 
     @Id
     @Column(name = "personId")
-    @EqualsAndHashCode.Include
     protected String id;
 
     protected String fullName;

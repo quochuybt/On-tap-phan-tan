@@ -2,19 +2,21 @@ package entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "Patients")
+@AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@SuperBuilder
+@ToString
+@Table(name = "Patients")
+@Entity
 @PrimaryKeyJoinColumn(name = "patientId")
-public class Patient extends Person {
+public class Patient extends Person{
 
     @ElementCollection
     @CollectionTable(

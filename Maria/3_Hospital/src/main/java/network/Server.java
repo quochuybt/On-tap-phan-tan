@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 public class Server {
     public static void main(String[] args) {
         ExecutorService pool = Executors.newFixedThreadPool(10);
-        try(ServerSocket serverSocket = new ServerSocket(9090)) {
+        try (ServerSocket serverSocket = new ServerSocket(4121)) {
             System.out.println("Server Started");
 
             while (true) {

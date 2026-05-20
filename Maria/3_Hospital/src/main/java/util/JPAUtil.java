@@ -1,10 +1,10 @@
-package db;
+package util;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-public class JPAUtil implements AutoCloseable{
+public class JPAUtil {
     private static final String PERSISTENCE_UNIT_NAME = "mariadb-pu";
     private static EntityManagerFactory emf;
 
@@ -12,13 +12,7 @@ public class JPAUtil implements AutoCloseable{
         emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
     }
 
-    public static EntityManager getEntityManager() {return  emf.createEntityManager();}
-
-
-    @Override
-    public void close() throws Exception {
-        if (emf != null) {
-            emf.close();
-        }
+    public static EntityManager getEntityManager() {
+        return emf.createEntityManager();
     }
 }

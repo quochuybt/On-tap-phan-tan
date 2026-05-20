@@ -5,17 +5,19 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "Doctors")
+@AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
+@ToString
+@Table(name = "Doctors")
+@Entity
 @PrimaryKeyJoinColumn(name = "doctorId")
 public class Doctor extends Person{
 
